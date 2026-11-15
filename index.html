@@ -1,1 +1,37 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClipForge AI</title>
+<style>
+body{background:#101018;color:white;font-family:Arial;margin:0;padding:30px}
+main{max-width:600px;margin:auto;background:#1c1c29;padding:25px;border-radius:18px}
+input,button{width:100%;padding:14px;margin-top:12px;box-sizing:border-box;border-radius:10px;border:0}
+button{background:#8055ff;color:white;font-weight:bold}
+</style>
+</head>
+<body>
+<main>
+<h1>ClipForge AI</h1>
+<p>Turn videos into viral clips</p>
+<input id="url" placeholder="Paste YouTube video URL">
+<button onclick="createJob()">Generate clips</button>
+<p id="status"></p>
+</main>
+<script>
+const API="https://clipforge-backend-production-85a81810.up.railway.app";
+async function createJob(){
+const status=document.getElementById("status");
+status.textContent="Sending video...";
+try{
+const r=await fetch(API+"/api/jobs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({videoUrl:document.getElementById("url").value})});
+const d=await r.json();
+status.textContent=r.ok?"Job created! ID: "+d.job.id:"Error: "+d.error;
+}catch(e){status.textContent="Backend connection failed";}
+}
+</script>
+</body>
+</html>
+
